@@ -24,3 +24,66 @@ console.log(supabase);
 // const obj2 = new Test('saxeli', 12)
 // const obj3  = new Test('52', 52)
 // const obj  = new Test('52')
+
+// კონსტრუქციის გეგმა
+class User {
+  public name: string;
+  public email: string;
+  public color: string | null;
+  public floorCount: number;
+  public userDetails: string;
+
+  private termalIsolation: string;
+  private test: string;
+
+  // მშენებელ-ინჟინერი + კონსტრუქტორი + არქიტექტორი
+  constructor(name: string, email: string, color: string | null = null, floorCount?: number) {
+    this.name = name;
+    this.email = email;
+
+    this.userDetails = `name: ${this.name}; email: ${this.email}`;
+
+    this.test = "test";
+
+    // User.color
+    this.color = color;
+    this.floorCount = floorCount ?? 0;
+    this.termalIsolation = "good";
+
+    this.layingFoundation();
+  }
+
+  getThisContext() {
+    return this;
+  }
+
+  layingBlocks() {
+    console.log("work put a block");
+  }
+
+  layingFoundation() {
+      this.screamOutName(this.name)
+      console.log("dig");
+      console.log("dig deeper");
+      console.log("pour cement");
+      console.log("good job!");
+      console.log("====================");
+  }
+
+  screamOutName(name: string) {
+    console.log(name);
+  }
+}
+
+// კონსტრუქტციის შენების ფაზა
+const currentUser = new User("firstName", "aleksandre.imnaishvili@tsu.ge", "green", 42);
+const currentUserNew = new User("lastName", "aleksandre.imnaishvili@tsu.ge");
+
+// private property
+currentUser.name;
+// currentUser.test;
+// ============
+
+// this keyword, attached to 'new' context
+console.log(currentUser.getThisContext());
+console.log(currentUserNew.getThisContext());
