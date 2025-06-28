@@ -8,7 +8,7 @@ const supabase = new ServiceManager({
   },
 });
 
-console.log(supabase);
+// console.log(supabase);
 
 // class Test {
 //   public name: string;
@@ -85,5 +85,5 @@ currentUser.name;
 // ============
 
 // this keyword, attached to 'new' context
-console.log(currentUser.getThisContext());
-console.log(currentUserNew.getThisContext());
+// console.log(currentUser.getThisContext());
+// console.log(currentUserNew.getThisContext());
