@@ -1,12 +1,16 @@
 # Supa base library basic integration
 
 - Form manager class
+    - formElement
+    - inputElementsList
+
+    - setUpListeners
     - input reader
     - input validator
     - input collector
     - submit handler
 
-- Utility class
+- FormUtility class
     - email validator
     - password validator
     - repeat password validator
