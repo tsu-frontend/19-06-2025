@@ -32,14 +32,15 @@ class FormUtility {
     // const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     // const result = pattern.test(passwordValue);
 
-    if (passwordValue.length >= 8) console.log("%cGood PASS!", "color: lightgreen");
+    if (passwordValue.length >= 2) console.log("%cGood PASS!", "color: lightgreen");
     else console.log("%cNot good PASS", "color: red");
 
-    return passwordValue.length >= 8;
+    return passwordValue.length >= 2;
   }
 
   // adjust as necessary
-  repeatPasswordValidator(repeatPasswordValue: string, passwordInput: string): boolean {
+  repeatPasswordValidator(repeatPasswordValue: string, passwordInput: string | null): boolean {
+    if (repeatPasswordValue == null || passwordInput == null) return false;
     const result: boolean = repeatPasswordValue === passwordInput;
     console.log(result);
     return result;
@@ -63,17 +64,19 @@ class FormUtility {
 // };
 // type TFormData = TFormDataSignUp & IFormDataSignIn;
 
+type TFormField = { value: string | null; isValid: boolean };
 type TFormData = {
-  name?: string | null;
-  surname?: string | null;
-  email: string | null;
-  password: string | null;
+  name: TFormField;
+  surname: TFormField;
+  email: TFormField;
+  password: TFormField;
+  repeatPassword: TFormField;
 };
 
 class FormManager {
   public formElement: HTMLFormElement;
   public inputElementsList: HTMLFormControlsCollection;
-  private formUtility: any;
+  private formUtility: FormUtility;
   private isSubmitable: boolean;
   private formData: TFormData;
 
@@ -82,15 +85,17 @@ class FormManager {
     this.inputElementsList = this.formElement.elements;
     this.isSubmitable = false;
     this.formData = {
-      password: null,
-      email: null,
-      name: null,
-      surname: null,
+      password: { value: null, isValid: false },
+      repeatPassword: { value: null, isValid: false },
+      email: { value: null, isValid: false },
+      name: { value: null, isValid: false },
+      surname: { value: null, isValid: false },
     };
 
     this.formUtility = new FormUtility();
 
     this.setUpListeners();
+    this.handleIsSubmitable()
   }
 
   setUpListeners() {
@@ -110,29 +115,58 @@ class FormManager {
 
   inputReader(target: HTMLInputElement) {
     if (target.type === "email") {
-      this.formUtility.emailValidator(target.value);
-      this.formData.email = target.value;
+      const isEmailValid = this.formUtility.emailValidator(target.value);
+      this.formData.email.value = target.value;
+      this.formData.email.isValid = isEmailValid;
+      console.log(this.formData);
     }
 
     // ესე პირობა ვალიდურია როგორც ძირითადი ისე განმეორებითი პაროლის შეყვანისას
     if (target.type === "password") {
       if (target.id !== "signup-repeat-password") {
-        this.formData.password = target.value;
+        const isPasswordValid = this.formUtility.passwordValidator(target.value);
+        this.formData.password.value = target.value;
+        this.formData.password.isValid = isPasswordValid;
+        console.log(this.formData);
       }
       this.formUtility.passwordValidator(target.value);
     }
 
     // ესე პირობა ვალიდურია განმეორებითი პაროლის შეყვანისას
     if (target.id === "signup-repeat-password") {
-      this.formUtility.repeatPasswordValidator(target.value, this.formData.password);
+      const isRepeatValid = this.formUtility.repeatPasswordValidator(target.value, this.formData.password.value);
+      this.formData.repeatPassword.value = target.value;
+      this.formData.repeatPassword.isValid = isRepeatValid;
+      console.log(this.formData);
     }
 
     if (target.type === "text") {
-      if (target.id === "singup-name") this.formData.name = target.value;
-      if (target.id === "singup-surname") this.formData.surname = target.value;
+      if (target.id === "signup-name") {
+        const isNameValid = typeof target.value === "string" && target.value.length > 0;
+        this.formData.name.value = target.value;
+        this.formData.name.isValid = isNameValid;
+        console.log(this.formData);
+      }
+      if (target.id === "signup-surname") {
+        const isSurnameValid = typeof target.value === "string" && target.value.length > 0;
+        this.formData.surname.value = target.value;
+        this.formData.surname.isValid = isSurnameValid;
+        console.log(this.formData);
+      }
     }
   }
+
+  handleIsSubmitable () {
+    for(let key in this.formData) {
+      console.log(this.formData[key as keyof TFormData])
+    }
+  }
+
+  handleSubmit () {
+
+  }
 }
+
 
 const signUpForm = document.getElementById("signup-form");
 const signInForm = document.getElementById("signin-form");
