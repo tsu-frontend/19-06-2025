@@ -1,3 +1,6 @@
+
+# KISS - Keep It Simple (Stupid)
+
 # Supa base library basic integration
 
 - Form manager class

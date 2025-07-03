@@ -45,19 +45,48 @@ class FormUtility {
     return result;
   }
 }
+// interface IFormDataSignIn {
+//   email: string;
+//   password: string;
+// }
+
+// type RFormData = Record<string, string>;
+// type RFormData = Record<'email' | 'password', string> & Partial<Record<'name' | 'surname', string>>;
+
+// interface TFormDataSignUp extends TFormDataSignIn{
+//   name: string
+//   surname: string
+// }
+// type TFormDataSignUp = {
+//   name: string;
+//   surname: string;
+// };
+// type TFormData = TFormDataSignUp & IFormDataSignIn;
+
+type TFormData = {
+  name?: string | null;
+  surname?: string | null;
+  email: string | null;
+  password: string | null;
+};
 
 class FormManager {
   public formElement: HTMLFormElement;
   public inputElementsList: HTMLFormControlsCollection;
   private formUtility: any;
-  private formPass: string | null;
   private isSubmitable: boolean;
+  private formData: TFormData;
 
   constructor(formElRef: HTMLFormElement) {
     this.formElement = formElRef;
     this.inputElementsList = this.formElement.elements;
     this.isSubmitable = false;
-    this.formPass = null
+    this.formData = {
+      password: null,
+      email: null,
+      name: null,
+      surname: null,
+    };
 
     this.formUtility = new FormUtility();
 
@@ -80,17 +109,27 @@ class FormManager {
   }
 
   inputReader(target: HTMLInputElement) {
-    if (target.type === "email") this.formUtility.emailValidator(target.value);
+    if (target.type === "email") {
+      this.formUtility.emailValidator(target.value);
+      this.formData.email = target.value;
+    }
 
     // ესე პირობა ვალიდურია როგორც ძირითადი ისე განმეორებითი პაროლის შეყვანისას
     if (target.type === "password") {
-      if(target.id !== "signup-repeat-password") this.formPass = target.value
-      this.formUtility.passwordValidator(target.value)
+      if (target.id !== "signup-repeat-password") {
+        this.formData.password = target.value;
+      }
+      this.formUtility.passwordValidator(target.value);
     }
 
     // ესე პირობა ვალიდურია განმეორებითი პაროლის შეყვანისას
     if (target.id === "signup-repeat-password") {
-      this.formUtility.repeatPasswordValidator(target.value, this.formPass);
+      this.formUtility.repeatPasswordValidator(target.value, this.formData.password);
+    }
+
+    if (target.type === "text") {
+      if (target.id === "singup-name") this.formData.name = target.value;
+      if (target.id === "singup-surname") this.formData.surname = target.value;
     }
   }
 }
