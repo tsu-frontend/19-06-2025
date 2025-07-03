@@ -20,7 +20,7 @@
 class FormUtility {
   emailValidator(emailValue: string): boolean {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const result = pattern.test(emailValue);
+    const result: boolean = pattern.test(emailValue);
 
     if (result) console.log("%cVerified Email", "color: lightgreen");
     else console.log("%cNot good Email", "color: red");
@@ -39,8 +39,10 @@ class FormUtility {
   }
 
   // adjust as necessary
-  repeatPasswordValidator(repeatPasswordValue: string): boolean {
-    return false;
+  repeatPasswordValidator(repeatPasswordValue: string, passwordInput: string): boolean {
+    const result: boolean = repeatPasswordValue === passwordInput;
+    console.log(result);
+    return result;
   }
 }
 
@@ -48,12 +50,14 @@ class FormManager {
   public formElement: HTMLFormElement;
   public inputElementsList: HTMLFormControlsCollection;
   private formUtility: any;
+  private formPass: string | null;
   private isSubmitable: boolean;
 
   constructor(formElRef: HTMLFormElement) {
     this.formElement = formElRef;
     this.inputElementsList = this.formElement.elements;
     this.isSubmitable = false;
+    this.formPass = null
 
     this.formUtility = new FormUtility();
 
@@ -76,11 +80,19 @@ class FormManager {
   }
 
   inputReader(target: HTMLInputElement) {
-    console.dir(target, "Changed!");
-        if (target.type === "email") this.formUtility.emailValidator(target.value);
-        if (target.type === "password") this.formUtility.passwordValidator(target.value);
-        // Add `repeatPasswordValidator `
+    if (target.type === "email") this.formUtility.emailValidator(target.value);
+
+    // ესე პირობა ვალიდურია როგორც ძირითადი ისე განმეორებითი პაროლის შეყვანისას
+    if (target.type === "password") {
+      if(target.id !== "signup-repeat-password") this.formPass = target.value
+      this.formUtility.passwordValidator(target.value)
     }
+
+    // ესე პირობა ვალიდურია განმეორებითი პაროლის შეყვანისას
+    if (target.id === "signup-repeat-password") {
+      this.formUtility.repeatPasswordValidator(target.value, this.formPass);
+    }
+  }
 }
 
 const signUpForm = document.getElementById("signup-form");
