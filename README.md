@@ -10,7 +10,7 @@
    - [x] setUpListeners
    - [x] input reader
    - [x] input validator
-   - [] input collector
+   - [x] input collector
    - [] submit handler
 
 - FormUtility class
