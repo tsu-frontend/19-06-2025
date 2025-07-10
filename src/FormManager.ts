@@ -65,6 +65,7 @@ class FormUtility {
 // type TFormData = TFormDataSignUp & IFormDataSignIn;
 
 type TFormField = { value: string | null; isValid: boolean };
+
 type TFormData = {
   name: TFormField;
   surname: TFormField;
@@ -176,3 +177,4 @@ if (signUpForm && signUpForm instanceof HTMLFormElement) {
 if (signInForm && signInForm instanceof HTMLFormElement) {
   const singInManager = new FormManager(signInForm);
 }
+
