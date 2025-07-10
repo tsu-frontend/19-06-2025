@@ -64,7 +64,7 @@ class FormUtility {
 // };
 // type TFormData = TFormDataSignUp & IFormDataSignIn;
 
-type TFormField = { value: string | null; isValid: boolean };
+type TFormField = {value: string | null; isValid: boolean};
 
 type TFormData = {
   name: TFormField;
@@ -81,22 +81,22 @@ class FormManager {
   private isSubmitable: boolean;
   private formData: TFormData;
 
-  constructor(formElRef: HTMLFormElement) {
+  constructor(formElRef: HTMLFormElement, submitHandler: (formData: TFormData) => void) {
     this.formElement = formElRef;
     this.inputElementsList = this.formElement.elements;
     this.isSubmitable = false;
     this.formData = {
-      password: { value: null, isValid: false },
-      repeatPassword: { value: null, isValid: false },
-      email: { value: null, isValid: false },
-      name: { value: null, isValid: false },
-      surname: { value: null, isValid: false },
+      password: {value: null, isValid: false},
+      repeatPassword: {value: null, isValid: false},
+      email: {value: null, isValid: false},
+      name: {value: null, isValid: false},
+      surname: {value: null, isValid: false},
     };
 
     this.formUtility = new FormUtility();
 
     this.setUpListeners();
-    this.handleIsSubmitable()
+    this.handleIsSubmitable();
   }
 
   setUpListeners() {
@@ -157,24 +157,48 @@ class FormManager {
     }
   }
 
-  handleIsSubmitable () {
-    for(let key in this.formData) {
-      console.log(this.formData[key as keyof TFormData])
+  handleIsSubmitable() {
+    for (let key in this.formData) {
+      console.log(this.formData[key as keyof TFormData]);
     }
   }
 
-  handleSubmit () {
-
-  }
+  handleSubmit() {}
 }
-
 
 const signUpForm = document.getElementById("signup-form");
 const signInForm = document.getElementById("signin-form");
 if (signUpForm && signUpForm instanceof HTMLFormElement) {
-  const singUpManager = new FormManager(signUpForm);
+  const singUpManager = new FormManager(signUpForm, singInSubmitHandler);
 }
 if (signInForm && signInForm instanceof HTMLFormElement) {
-  const singInManager = new FormManager(signInForm);
+  const singInManager = new FormManager(signInForm, singInSubmitHandler);
 }
 
+/*
+Pseudocode SIGN-IN handler
+
+უკვე გვაქვს მონაცემები
+უნდა გააგზავნოს ავტორიზაციის მოთხოვნა Supabase თან
+დავლოგოთ პასუხი
+
+*/
+
+async function singInSubmitHandler(formData: TFormData) {
+  if (!formData.email.value || !formData.password.value) return;
+  const singInData: {email: string; password: string} = {
+    email: formData.email.value,
+    password: formData.password.value,
+  };
+
+  const response = await fetch("singin ednpoint", {body: JSON.stringify(singInData)});
+  const resData = await response.json();
+  console.log(resData);
+}
+async function singUpSubmitHandler(formData: TFormData) {
+
+
+  const response = await fetch("singin ednpoint", {body: JSON.stringify(formData)});
+  const resData = await response.json();
+  console.log(resData);
+}
