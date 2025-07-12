@@ -9,20 +9,17 @@ console.log(supa_service_manager);
 class SignInForm extends FormManager {
   async handleSubmit(): Promise<void> {
     if (!this.formData.email.value || !this.formData.password.value) return;
-    const singInData: {email: string; password: string} = {
-      email: this.formData.email.value,
-      password: this.formData.password.value,
-    };
-
-    const response = await fetch("singin ednpoint", {body: JSON.stringify(singInData)});
-    const resData = await response.json();
+    const email = this.formData.email.value;
+    const password = this.formData.password.value;
+    const response = await supa_service_manager.signIn(email, password);
+    console.log(response);
   }
 }
 class SignUpForm extends FormManager {
   async handleSubmit(): Promise<void> {
-    const response = await fetch("singin ednpoint", {body: JSON.stringify(this.formData)});
-    const resData = await response.json();
-    console.log("Sign Up form", this.formData);
+    console.log(this.formData.email.value as string, this.formData.password.value as string);
+    const response = await supa_service_manager.signUp(this.formData.email.value as string, this.formData.password.value as string, {});
+    console.log(response);
   }
 }
 

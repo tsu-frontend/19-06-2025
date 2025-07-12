@@ -26,7 +26,7 @@
   - [] surName
 
 - Supabase Lib implementation
-  - integrate existing Supabase Lib into current project
+  - [x] integrate existing Supabase Lib into current project
 
 # TODO
 
