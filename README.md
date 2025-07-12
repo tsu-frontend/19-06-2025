@@ -25,6 +25,9 @@
   - [] name
   - [] surName
 
+- Supabase Lib implementation
+  - integrate existing Supabase Lib into current project
+
 # TODO
 
 - [] updating password after validating repeatPassword should be checked!!!

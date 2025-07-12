@@ -1,5 +1,11 @@
 import {FormManager} from "./FormManager";
+import {ServiceManager} from "supabase-service-manager";
 
+const supaAnonkey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supaURL = import.meta.env.VITE_SUPABASE_URL;
+const supa_service_manager = new ServiceManager({supabase: {url: supaURL, anonKey: supaAnonkey}});
+
+console.log(supa_service_manager);
 class SignInForm extends FormManager {
   async handleSubmit(): Promise<void> {
     if (!this.formData.email.value || !this.formData.password.value) return;
