@@ -20,6 +20,7 @@
   - [x] repeat password validator
 
 - User Class
+
   - [] email
   - [] password
   - [] name
@@ -63,6 +64,11 @@ Hint:
 1. - კლასები მრავლდებიან
 2. - overriding
 
-FAILED!
+## FAILED!
+
+### TASK 3
+
+ამჟამად Supabase მომხმარებელთა ბაზასთან კავშირი დამყარებულია.
+შექმენით სატესტო პროექტი Supabase-ზე, მოარგეთ ჩვენი პროექტის სტრუქტურას და დაამატეთ რამდენიმე მომხმარებელი.
 
 # END TASK SECTION
