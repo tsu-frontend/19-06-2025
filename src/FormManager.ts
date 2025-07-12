@@ -79,9 +79,9 @@ class FormManager {
   public inputElementsList: HTMLFormControlsCollection;
   private formUtility: FormUtility;
   private isSubmitable: boolean;
-  private formData: TFormData;
+  public formData: TFormData;
 
-  constructor(formElRef: HTMLFormElement, submitHandler: (formData: TFormData) => void) {
+  constructor(formElRef: HTMLFormElement) {
     this.formElement = formElRef;
     this.inputElementsList = this.formElement.elements;
     this.isSubmitable = false;
@@ -102,8 +102,9 @@ class FormManager {
   setUpListeners() {
     [...this.inputElementsList].forEach((element) => {
       if (element instanceof HTMLButtonElement) {
-        element.addEventListener("click", () => {
-          console.log("clicked!");
+        element.addEventListener("click", (e: MouseEvent) => {
+          e.preventDefault();
+          this.handleSubmit(e);
         });
       } else {
         element.addEventListener("change", (e) => {
@@ -119,7 +120,6 @@ class FormManager {
       const isEmailValid = this.formUtility.emailValidator(target.value);
       this.formData.email.value = target.value;
       this.formData.email.isValid = isEmailValid;
-      console.log(this.formData);
     }
 
     // ესე პირობა ვალიდურია როგორც ძირითადი ისე განმეორებითი პაროლის შეყვანისას
@@ -128,7 +128,6 @@ class FormManager {
         const isPasswordValid = this.formUtility.passwordValidator(target.value);
         this.formData.password.value = target.value;
         this.formData.password.isValid = isPasswordValid;
-        console.log(this.formData);
       }
       this.formUtility.passwordValidator(target.value);
     }
@@ -138,7 +137,6 @@ class FormManager {
       const isRepeatValid = this.formUtility.repeatPasswordValidator(target.value, this.formData.password.value);
       this.formData.repeatPassword.value = target.value;
       this.formData.repeatPassword.isValid = isRepeatValid;
-      console.log(this.formData);
     }
 
     if (target.type === "text") {
@@ -146,33 +144,53 @@ class FormManager {
         const isNameValid = typeof target.value === "string" && target.value.length > 0;
         this.formData.name.value = target.value;
         this.formData.name.isValid = isNameValid;
-        console.log(this.formData);
       }
       if (target.id === "signup-surname") {
         const isSurnameValid = typeof target.value === "string" && target.value.length > 0;
         this.formData.surname.value = target.value;
         this.formData.surname.isValid = isSurnameValid;
-        console.log(this.formData);
       }
     }
   }
 
   handleIsSubmitable() {
     for (let key in this.formData) {
-      console.log(this.formData[key as keyof TFormData]);
+      // console.log(this.formData[key as keyof TFormData]);
     }
   }
 
-  handleSubmit() {}
+  async handleSubmit(e: MouseEvent) {
+    console.log("rame");
+  }
+}
+
+class SignInForm extends FormManager {
+  async handleSubmit(): Promise<void> {
+    if (!this.formData.email.value || !this.formData.password.value) return;
+    const singInData: {email: string; password: string} = {
+      email: this.formData.email.value,
+      password: this.formData.password.value,
+    };
+
+    const response = await fetch("singin ednpoint", {body: JSON.stringify(singInData)});
+    const resData = await response.json();
+  }
+}
+class SignUpForm extends FormManager {
+  async handleSubmit(): Promise<void> {
+    const response = await fetch("singin ednpoint", {body: JSON.stringify(this.formData)});
+    const resData = await response.json();
+    console.log("Sign Up form", this.formData);
+  }
 }
 
 const signUpForm = document.getElementById("signup-form");
 const signInForm = document.getElementById("signin-form");
 if (signUpForm && signUpForm instanceof HTMLFormElement) {
-  const singUpManager = new FormManager(signUpForm, singInSubmitHandler);
+  const singUpManager = new SignUpForm(signUpForm);
 }
 if (signInForm && signInForm instanceof HTMLFormElement) {
-  const singInManager = new FormManager(signInForm, singInSubmitHandler);
+  const singInManager = new SignInForm(signInForm);
 }
 
 /*
@@ -193,12 +211,8 @@ async function singInSubmitHandler(formData: TFormData) {
 
   const response = await fetch("singin ednpoint", {body: JSON.stringify(singInData)});
   const resData = await response.json();
-  console.log(resData);
 }
 async function singUpSubmitHandler(formData: TFormData) {
-
-
   const response = await fetch("singin ednpoint", {body: JSON.stringify(formData)});
   const resData = await response.json();
-  console.log(resData);
 }
