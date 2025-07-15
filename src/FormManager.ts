@@ -87,6 +87,6 @@ export class FormManager {
   }
 
   async handleSubmit(e: MouseEvent) {
-    console.log("rame");
+    console.log("Handle form submit from generic FormManager class");
   }
 }
