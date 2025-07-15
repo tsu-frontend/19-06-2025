@@ -25,6 +25,7 @@
   - [] password
   - [] name
   - [] surName
+  - [] avatar
 
 - Supabase Lib implementation
   - [x] integrate existing Supabase Lib into current project
