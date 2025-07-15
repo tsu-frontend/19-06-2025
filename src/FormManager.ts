@@ -16,8 +16,8 @@ export class FormManager {
       password: {value: null, isValid: false},
       repeatPassword: {value: null, isValid: false},
       email: {value: null, isValid: false},
-      name: {value: null, isValid: false},
-      surname: {value: null, isValid: false},
+      firstName: {value: null, isValid: false},
+      lastName: {value: null, isValid: false},
     };
 
     this.formUtility = new FormUtility();
@@ -69,13 +69,13 @@ export class FormManager {
     if (target.type === "text") {
       if (target.id === "signup-name") {
         const isNameValid = typeof target.value === "string" && target.value.length > 0;
-        this.formData.name.value = target.value;
-        this.formData.name.isValid = isNameValid;
+        this.formData.firstName.value = target.value;
+        this.formData.firstName.isValid = isNameValid;
       }
       if (target.id === "signup-surname") {
         const isSurnameValid = typeof target.value === "string" && target.value.length > 0;
-        this.formData.surname.value = target.value;
-        this.formData.surname.isValid = isSurnameValid;
+        this.formData.lastName.value = target.value;
+        this.formData.lastName.isValid = isSurnameValid;
       }
     }
   }

@@ -17,7 +17,8 @@ class SignInForm extends FormManager {
 class SignUpForm extends FormManager {
   async handleSubmit(): Promise<void> {
     console.log(this.formData.email.value as string, this.formData.password.value as string);
-    const response = await supa_service_manager.signUp(this.formData.email.value as string, this.formData.password.value as string, {});
+    const payload = {firstName: this.formData.firstName.value as string, lastName: this.formData.lastName.value as string};
+    const response = await supa_service_manager.signUp(this.formData.email.value as string, this.formData.password.value as string, payload);
     console.log(response);
   }
 }
